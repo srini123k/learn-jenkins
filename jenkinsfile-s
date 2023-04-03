@@ -1,19 +1,35 @@
 node('workstation') {
+
+    properties([
+        parameters([
+            string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Environment')
+        ])
+    ])
+
+    env.SAMPLE_URL = "google.com"
     try {
         withCredentials([usernameColonPassword(credentialsId: 'SSH', variable: 'USERPASS')]) {
-            stage ("one") {
-              echo "one"
-              sh 'env'
-              sh 'env >/tmp/env'
+            stage("one") {
+                echo "one"
+                sh 'env'
+                sh 'env >/tmp/env'
             }
         }
 
-        stage ("two") {
-          echo "two"
+        if ( PERSON == "Srini" ) {
+            stage('two') {
+                input(id: 'deploy_approval', message: 'Approve deployment?', ok: 'Deploy', reject: 'Cancel')
+                echo "two"
+            }
         }
+
     } catch (e) {
-        stage('Declarative: Post Actions' ) {
-               echo 'this will run only if it is failure'
+        stage('Declarative: Post Actions') {
+            echo 'This will run only if failed'
         }
+
     }
+
 }
+
+
