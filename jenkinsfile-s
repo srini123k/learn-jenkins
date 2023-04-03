@@ -1,8 +1,17 @@
-node {
-   stage ("one") {
-       echo "one"
-   }
-   stage ("two") {
+node('workstation') {
+    try {
+        withCredentials([usernameColonPassword(credentialsId: 'SSH', variable: 'USERPASS')]) {
+            stage ("one") {
+              echo "one"
+            }
+        }
+
+        stage ("two") {
           echo "two"
-      }
+        }
+    } catch (e) {
+        stage('Declarative: Post Actions' ) {
+               echo 'this will run only if it is failure'
+        }
+    }
 }
