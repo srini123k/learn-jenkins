@@ -1,10 +1,10 @@
 pipeline {
   // agent any
   // node name agent
- // agent {
-   // node { label "workstation" }
+  agent {
+    node { label "workstation" }
 
-  // }
+   }
 
     environment {
               SAMPLE_URL= "www.google.com"
